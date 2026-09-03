@@ -1,0 +1,66 @@
+# CI: Intel x86_64 build + smoke test on GitHub's native Intel macOS runner.
+#
+# Hosted CI validates toolchain, binary architecture, bundle seal, and
+# --version startup. It CANNOT validate a stable GPU environment for rendered
+# gameplay — real Intel hardware testing gates v1.0 (see ROADMAP.md).
+#
+# macos-15-intel is available until ~Fall 2027; the fallback afterwards is
+# cross-compiling on an arm64 runner or a self-hosted Intel Mac (ROADMAP.md).
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-intel:
+    name: Intel x86_64 build (macos-15-intel)
+    runs-on: macos-15-intel
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Host tools
+        run: |
+          command -v pkg-config >/dev/null || brew install pkg-config
+          cmake --version
+          pkg-config --version
+          python3 --version
+
+      # Clones upstream pinned to v1.5.2, builds SDL2 (x86_64) from source,
+      # fetches the hash-pinned wgpu-native x86_64 prebuilt (network), builds
+      # the engine, and assembles the ad-hoc-signed app.
+      - name: Build (gbmt-build-macos.sh)
+        run: ./gbmt-build-macos.sh
+
+      - name: Bundle rebrand + verify (gbmt-bundle-macos.sh)
+        run: ./gbmt-bundle-macos.sh
+
+      - name: Package DMG (gbmt-package-macos.sh)
+        run: ./gbmt-package-macos.sh
+
+      - name: Smoke test (--version, headless-safe)
+        run: |
+          APP=goldenballoon/dist/mdkr64.app
+          EXEC="$APP/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Contents/Info.plist")"
+          lipo -archs "$EXEC"
+          test "$(lipo -archs "$EXEC")" = "x86_64"
+          "$EXEC" --version
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Golden-Balloon-MacTimber-Intel-DMG
+          path: |
+            dist/*.dmg
+            dist/*.sha256
+          if-no-files-found: error
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: logs/

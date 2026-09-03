@@ -1,0 +1,5 @@
+# zsh/bash scripts and YAML must stay LF even when edited on Windows
+* text=auto
+*.sh text eol=lf
+*.yml text eol=lf
+*.md text eol=lf

@@ -1,0 +1,13 @@
+# Upstream clone (pinned at build time by gbmt-build-macos.sh — never commit)
+goldenballoon/
+
+# Build outputs and logs
+dist/
+logs/
+
+# ROMs and game data — NEVER commit (bring your own ROM)
+roms/*
+!roms/README.md
+
+# macOS noise
+.DS_Store
