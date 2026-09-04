@@ -28,7 +28,9 @@
 # CHANGELOG
 # v1.1  (2026-09-04) - Pin bump to upstream v1.6.0; app bundle is now
 #                      "Golden Balloon.app" (upstream rename, engine binary still
-#                      mdkr64); pending hardware re-validation
+#                      mdkr64). Fix: --clean no longer rm -rf's goldenballoon/dist/
+#                      (upstream tracks prebuilt dist/web/ assets the bundler needs);
+#                      it now resets that dir via git instead. Pending re-validation.
 # v1.0  (2026-09-04) - Promoted unchanged after confirmed end-to-end validation
 #                      on Intel hardware (see CHANGELOG.md)
 # v0.10 (2026-09-03) - Initial version; series conventions from
@@ -137,8 +139,16 @@ echo "   ✅ Pinned commit: $SOURCE_COMMIT" | tee -a "$LOGFILE"
 if (( CLEAN )); then
   echo "" | tee -a "$LOGFILE"
   echo "🧹 Step 4: --clean — wiping build artifacts" | tee -a "$LOGFILE"
-  rm -rf "$REPO_DIR/$BUILD_DIR_NAME" "$REPO_DIR/build-macos-deps" "$REPO_DIR/dist" "$SCRIPT_DIR/dist"
-  echo "   ✅ Wiped $BUILD_DIR_NAME/, build-macos-deps/, dist/" | tee -a "$LOGFILE"
+  # These dirs are wrapper-created build output — safe to remove outright.
+  rm -rf "$REPO_DIR/$BUILD_DIR_NAME" "$REPO_DIR/build-macos-deps" "$SCRIPT_DIR/dist"
+  # goldenballoon/dist/ is NOT ours to wipe: upstream tracks prebuilt web
+  # assets under dist/web/ (incl. the Phone Party LAN controller page that
+  # build_app_bundle.sh copies into the bundle — a plain rm -rf here deletes
+  # it and the build aborts). Remove only untracked output (our .app) and
+  # restore any tracked file, leaving upstream's dist/web/ pristine.
+  git -C "$REPO_DIR" clean -fdq -- dist
+  git -C "$REPO_DIR" checkout -q -- dist
+  echo "   ✅ Wiped build dirs + top-level dist/; reset goldenballoon/dist/ to pristine (kept tracked dist/web/)" | tee -a "$LOGFILE"
 fi
 
 # ── Step 5: Pinned SDL2 (x86_64) ──────────────────────────────────────────────

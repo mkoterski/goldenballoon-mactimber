@@ -10,6 +10,14 @@ versions, each noting the upstream tag it tracks.
 - Upstream renamed the bundle in v1.6.0: the app is now `Golden Balloon.app`
   (engine binary/`CFBundleExecutable` still `mdkr64`); all scripts and CI
   updated for the new path.
+- **Fix:** `gbmt-build-macos.sh --clean` no longer `rm -rf`'s
+  `goldenballoon/dist/`. Upstream tracks prebuilt web assets there
+  (`dist/web/`, including the Phone Party LAN controller page that
+  `build_app_bundle.sh` copies into the bundle), so wiping the whole dir made
+  the next build abort with "Local-play controller asset is missing". `--clean`
+  now resets that dir via git (`clean` untracked output + `checkout` tracked
+  files), leaving `dist/web/` intact. Builds without `--clean` were never
+  affected.
 - Awaiting hardware re-validation (abbreviated Phase 3 checklist) before the
   v1.1 release.
 
