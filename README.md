@@ -45,19 +45,6 @@ MacBook Pro 13" 2020 (i7-1068NG7, Intel Iris Plus, 32 GB), macOS Tahoe 26.5.2:
   answered. 1280×960 @ 2× render scale, 60 Hz fifo, clean exit (status 0).
   Minor: 4 audio underruns over a ~2.5 min session.
 
-## Why is the app called `mdkr64.app`?
-
-By design — that is not a bug. `mdkr64` is **upstream's engine name**: its
-CMake target, binary, `CFBundleExecutable`, and `--version` string
-(`mdkr64 1.5.2`). Upstream's `build_app_bundle.sh` assembles `mdkr64.app`,
-and both upstream's verifiers and this wrapper's checks expect that name, so
-the wrapper keeps it. Branding lives elsewhere: the bundle ID
-(`com.mkoterski.goldenballoon-mactimber`, set by `gbmt-bundle-macos.sh`) and
-the DMG name (`Golden-Balloon-MacTimber-<ver>-Intel-Mac.dmg`). `gbmt` is only
-the script prefix, never the app name.
-
----
-
 ## How this differs from the sibling ports
 
 Upstream ships a complete first-party macOS packaging pipeline
