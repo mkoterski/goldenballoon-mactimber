@@ -57,11 +57,12 @@ faster iteration even if upstream ships its own Intel builds.
 
 ## Phase 5 — Maintenance
 
-- **Pin bumps:** v1.6.0 went stable and the pin is bumped (2026-09-04) —
-  upstream also renamed the bundle to `Golden Balloon.app` (engine binary
-  still `mdkr64`), and the scripts track that. Next: rebuild + abbreviated
-  Phase 3 checklist on the Intel Mac, then release
-  `v1.1 (tracks goldenballoon v1.6.0)`. Same procedure for future bumps.
+- **Pin bumps:** v1.6.0 pin bumped and **re-validated on the Intel Mac
+  (2026-09-04) → v1.1 released.** Upstream renamed the bundle to
+  `Golden Balloon.app` (engine binary still `mdkr64`); scripts track that.
+  A `--clean` bug (it wiped upstream's tracked `dist/web/` assets) was found
+  and fixed during this bump. Same procedure for future bumps: bump
+  `UPSTREAM_TAG`, rebuild `--clean`, abbreviated Phase 3 checklist, release.
 - **CI runner sunset:** `macos-15-intel` retires ~Fall 2027. Fallback:
   cross-compile on an arm64 runner (`CMAKE_OSX_ARCHITECTURES=x86_64`,
   Rosetta smoke test — itself gone with macOS 28 images), or a self-hosted

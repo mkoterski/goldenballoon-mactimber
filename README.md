@@ -21,31 +21,33 @@ Codename: *Timber* — the tiger who runs the races while Diddy's away.
 
 ## Status
 
-**v1.1 in progress — pin bumped to goldenballoon v1.6.0 (online
-multiplayer), awaiting hardware re-validation.** Upstream also renamed the
-bundle in v1.6.0: the app is now **`Golden Balloon.app`** (the engine binary
-inside stays `mdkr64`). **v1.0** (tracks v1.5.2) remains the last release
-confirmed end-to-end on real Intel hardware — see Confirmed Working below
-and [ROADMAP.md](ROADMAP.md).
+**v1.1 — confirmed working on real Intel hardware (2026-09-04, tracks
+goldenballoon v1.6.0).** Full pipeline re-validated at the new pin: build →
+bundle → package → gameplay on WebGPU. Upstream renamed the bundle in
+v1.6.0, so the app is now **`Golden Balloon.app`** (the engine binary inside
+stays `mdkr64`). See Confirmed Working below and [ROADMAP.md](ROADMAP.md).
 
 ## Confirmed Working (2026-09-04)
 
 ![Golden Balloon running on WebGPU on the Intel MacBook Pro](docs/screenshot-gameplay-webgpu.png)
 
-MacBook Pro 13" 2020 (i7-1068NG7, Intel Iris Plus, 32 GB), macOS Tahoe 26.5.2:
+MacBook Pro 13" 2020 (i7-1068NG7, Intel Iris Plus, 32 GB), macOS Tahoe
+26.5.2. Re-validated at **v1.6.0** (`mdkr64 1.6.0`); v1.5.2 passed the same
+gates earlier:
 
-- **Build:** x86_64-only `mdkr64.app`, ad-hoc sealed, verify PASS, reports
-  `mdkr64 1.5.2`. No patches needed (clang 21 OK).
+- **Build:** x86_64-only `Golden Balloon.app`, ad-hoc sealed, verify PASS,
+  reports `mdkr64 1.6.0`. No patches needed (clang 21 OK).
 - **Bundle:** rebranded to `com.mkoterski.goldenballoon-mactimber`, re-sealed;
   Gatekeeper + asset-free verifiers all PASS (6/6 checks).
-- **Package:** `Golden-Balloon-MacTimber-1.5.2-Intel-Mac.dmg` (10 MB) +
+- **Package:** `Golden-Balloon-MacTimber-1.6.0-Intel-Mac.dmg` (10 MB) +
   `.sha256`; DMG checksum and packaged-app re-verification PASS.
 - **Install:** DMG → `/Applications`, launched via the documented Gatekeeper
-  "Open Anyway" flow — no "damaged" error.
+  "Open Anyway" flow — no "damaged" error (confirmed at v1.0; identical
+  ad-hoc seal at v1.6.0).
 - **Gameplay:** US 1.1 ROM SHA-256-validated and loaded; **WebGPU
-  (wgpu-native → Metal) works on Intel Iris Plus** — the main v1.0 unknown,
-  answered. 1280×960 @ 2× render scale, 60 Hz fifo, clean exit (status 0).
-  Minor: 4 audio underruns over a ~2.5 min session.
+  (wgpu-native → Metal) works on Intel Iris Plus**. 1280×960 @ 2× render
+  scale, 60 Hz fifo, 4955 frames presented with 0 failures, clean exit
+  (status 0). Minor: 8 audio underruns over a ~2.8 min session.
 
 ## How this differs from the sibling ports
 

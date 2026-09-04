@@ -4,7 +4,10 @@ All notable changes to the goldenballoon-mactimber scripts. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versions are wrapper
 versions, each noting the upstream tag it tracks.
 
-## [Unreleased] — will become 1.1 (tracks goldenballoon v1.6.0)
+## [1.1] — 2026-09-04 (tracks goldenballoon v1.6.0)
+
+Re-validated end-to-end on the same Intel hardware as v1.0 (MacBook Pro 13"
+2020, i7-1068NG7, Intel Iris Plus, Tahoe 26.5.2).
 
 - Pin bumped v1.5.2 → v1.6.0 (online multiplayer went stable upstream).
 - Upstream renamed the bundle in v1.6.0: the app is now `Golden Balloon.app`
@@ -18,8 +21,12 @@ versions, each noting the upstream tag it tracks.
   now resets that dir via git (`clean` untracked output + `checkout` tracked
   files), leaving `dist/web/` intact. Builds without `--clean` were never
   affected.
-- Awaiting hardware re-validation (abbreviated Phase 3 checklist) before the
-  v1.1 release.
+
+Confirmed working: fresh `--clean` build → `Golden Balloon.app` (x86_64,
+sealed, reports `mdkr64 1.6.0`); verifiers 6/6; DMG
+`Golden-Balloon-MacTimber-1.6.0-Intel-Mac.dmg` + `.sha256`, re-verify PASS;
+US 1.1 ROM validated; WebGPU on Iris Plus, 4955 frames presented / 0
+failures, clean exit. Minor: 8 audio underruns in ~2.8 min.
 
 ## [1.0] — 2026-09-04 (tracks goldenballoon v1.5.2)
 
