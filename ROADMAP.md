@@ -3,25 +3,20 @@
 The conceptual path from scaffold (v0.10) to a confirmed Intel Mac release
 (v1.0) and beyond. Each phase gates the next.
 
-## Phase 1 — First build on the Intel Mac (next step)
+## Phase 1 — First build on the Intel Mac ✅ done 2026-09-04
 
-On the Intel Mac (MacBook Pro 2020, Tahoe 26.5):
+Setup + build ran clean on the MacBook Pro 2020 (Tahoe 26.5.2); valid
+x86_64 `mdkr64.app`, sealed and verified, reports `mdkr64 1.5.2`. Findings:
 
-```
-git clone https://github.com/mkoterski/goldenballoon-mactimber.git ~/Documents/GitHub/goldenballoon-mactimber
-cd ~/Documents/GitHub/goldenballoon-mactimber
-chmod +x *.sh
-./gbmt-initial-setup.sh
-./gbmt-build-macos.sh
-```
+- wgpu fetch and SDL2-from-source worked; clang 21 fine, no `patches/` needed.
+- Setup log warning `refs/tags/v1.5.2 ... is not a commit!` is harmless — git
+  noting the annotated tag object; checkout landed on the pinned commit.
+- The app is named `mdkr64.app`, not `gbmt.app` — upstream's engine name,
+  kept by design (see README "Why is the app called mdkr64.app?").
+- Only build noise: expected SDL2 deprecation warnings and the Homebrew
+  Tier 3 notice.
 
-Expected risks, in likelihood order:
-1. Configure-time wgpu fetch needs network; corporate proxies can break it.
-2. SDL2-from-source or engine warnings promoted to errors by newer clang 21
-   — if so, a `patches/` dir gets introduced (none needed so far).
-3. Anything else is a real finding — log it in an issue.
-
-## Phase 2 — Bundle, package, install like a user
+## Phase 2 — Bundle, package, install like a user (next step)
 
 `./gbmt-bundle-macos.sh` → `./gbmt-package-macos.sh`, then: mount the DMG,
 drag to `/Applications`, launch via the documented Gatekeeper flow. A

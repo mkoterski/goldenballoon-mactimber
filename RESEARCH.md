@@ -148,6 +148,12 @@ places — see §5):
    Tahoe, so lower `LSMinimumSystemVersion` values ship untested (series
    precedent: target "macOS Tahoe and later" anyway).
 4. Upstream moves fast — expect to bump the pin (v1.6.0 stable is likely soon).
+5. **Confirmed 2026-09-04:** setup + build passed on that hardware — valid
+   x86_64 `mdkr64.app`, sealed and verified. Naming note: `mdkr64` is
+   upstream's engine name (CMake target, binary, `CFBundleExecutable`,
+   `--version`), so the bundle is `mdkr64.app` by design — `gbmt` is only the
+   wrapper's script prefix. Remaining risk is unchanged: item 2 (WebGPU on
+   Iris Plus), answered in Roadmap Phase 3.
 
 ## 5. Deviations from the instructions file (justified by research)
 
