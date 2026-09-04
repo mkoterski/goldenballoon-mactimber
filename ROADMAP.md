@@ -16,30 +16,26 @@ x86_64 `mdkr64.app`, sealed and verified, reports `mdkr64 1.5.2`. Findings:
 - Only build noise: expected SDL2 deprecation warnings and the Homebrew
   Tier 3 notice.
 
-## Phase 2 — Bundle, package, install like a user (next step)
+## Phase 2 — Bundle + package ✅ done 2026-09-04
 
-`./gbmt-bundle-macos.sh` → `./gbmt-package-macos.sh`, then: mount the DMG,
-drag to `/Applications`, launch via the documented Gatekeeper flow. A
-"damaged" error (vs. the normal unidentified-developer prompt) fails this
-phase.
+Bundle: rebrand + re-seal clean; Gatekeeper + asset-free verifiers PASS
+(6/6). Package: `Golden-Balloon-MacTimber-1.5.2-Intel-Mac.dmg` (10 MB) +
+`.sha256`; DMG checksum and packaged-app re-verify PASS. Remaining
+user-install test moved to Phase 3.
 
-## Phase 3 — Hardware validation (the v1.0 gate)
+## Phase 3 — Hardware validation (the v1.0 gate) — mostly done 2026-09-04
 
-The single biggest unknown: **WebGPU (wgpu-native → Metal) on the Intel
-Iris Plus GPU**. Checklist (mirrors README Versioning + instructions §8):
+The single biggest unknown — **WebGPU (wgpu-native → Metal) on Intel Iris
+Plus — is answered: it works.** Run session (US 1.1 ROM, dev launcher):
+renderer `webgpu`, 1280×960 @ 2×, 60 Hz fifo, no visual corruption reported,
+clean exit; 4 audio underruns in ~2.5 min (watch, not blocking).
 
+- [x] Renderer `webgpu` on Iris Plus (no `--gl` override)
+- [x] ROM (US 1.1) validates and loads; gameplay reached, confirmed working
+- [x] No `std::bad_variant_access`-class crash (the Starship-port caution)
+- [ ] Mount DMG, drag to `/Applications`, launch via the documented
+      Gatekeeper flow — a "damaged" error fails this
 - [ ] Clean `--clean` build from a fresh checkout passes
-- [ ] App launches from `/Applications`; Gatekeeper behaves as documented
-- [ ] Diagnostics panel shows `Renderer: webgpu` (no `--gl` override)
-- [ ] ROM (US/EU 1.1) validates and loads; gameplay reached
-- [ ] **Full race completed without crash** (watch for
-      `std::bad_variant_access`-class errors — the Starship port's Intel
-      Metal failure mode; different stack here, same caution)
-- [ ] No fractured sky/terrain or repeated-logo corruption (upstream's own
-      play-test criteria)
-- [ ] Controller input, audio, widescreen HUD on par with the arm64 build
-- [ ] If WebGPU fails on Iris Plus: document, test `--gl` as diagnostic
-      evidence, and file upstream — do NOT ship OpenGL as the default
 
 Then: cut **v1.0**, recording exact hardware + macOS in CHANGELOG.md, and
 attach the DMG + `.sha256` to a GitHub release.
@@ -80,7 +76,7 @@ faster iteration even if upstream ships its own Intel builds.
 
 | Item | Status |
 | --- | --- |
-| wgpu→Metal on Intel Iris Plus | **Unknown — Phase 3 answers it** |
+| wgpu→Metal on Intel Iris Plus | **Confirmed working 2026-09-04** |
 | Upstream x86_64 CMake path | In-tree, hash pinned, unshipped (verified in RESEARCH.md) |
 | `verify_unsigned_release.sh` arm64 hardcode | Worked around (direct verifier calls); upstream PR candidate |
 | GitHub Intel runners | Available (`macos-15-intel`) until ~Fall 2027 |

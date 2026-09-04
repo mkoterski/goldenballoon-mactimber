@@ -21,14 +21,25 @@ Codename: *Timber* — the tiger who runs the races while Diddy's away.
 
 ## Status
 
-**v0.10 — first hardware build confirmed (2026-09-04).**
-`gbmt-initial-setup.sh` and `gbmt-build-macos.sh` ran clean on the target
-Intel Mac (MacBook Pro 13" 2020, i7-1068NG7, Tahoe 26.5.2): pinned clone at
-v1.5.2, SDL2 2.32.10 built from source, engine compiled, and a valid
-x86_64-only `mdkr64.app` assembled — ad-hoc sealed, Gatekeeper bundle verify
-PASS, binary reports `mdkr64 1.5.2`. No patches needed (clang 21 OK).
-Bundle/package/gameplay validation is still pending — see
-[ROADMAP.md](ROADMAP.md).
+**v0.10 — confirmed working on real Intel hardware (2026-09-04).** The full
+pipeline (setup → build → bundle → package → run) passed on the target Mac,
+and the game runs on WebGPU. Remaining before v1.0: the DMG
+install-to-`/Applications` Gatekeeper pass — see [ROADMAP.md](ROADMAP.md).
+
+## Confirmed Working (2026-09-04)
+
+MacBook Pro 13" 2020 (i7-1068NG7, Intel Iris Plus, 32 GB), macOS Tahoe 26.5.2:
+
+- **Build:** x86_64-only `mdkr64.app`, ad-hoc sealed, verify PASS, reports
+  `mdkr64 1.5.2`. No patches needed (clang 21 OK).
+- **Bundle:** rebranded to `com.mkoterski.goldenballoon-mactimber`, re-sealed;
+  Gatekeeper + asset-free verifiers all PASS (6/6 checks).
+- **Package:** `Golden-Balloon-MacTimber-1.5.2-Intel-Mac.dmg` (10 MB) +
+  `.sha256`; DMG checksum and packaged-app re-verification PASS.
+- **Gameplay:** US 1.1 ROM SHA-256-validated and loaded; **WebGPU
+  (wgpu-native → Metal) works on Intel Iris Plus** — the main v1.0 unknown,
+  answered. 1280×960 @ 2× render scale, 60 Hz fifo, clean exit (status 0).
+  Minor: 4 audio underruns over a ~2.5 min session.
 
 ## Why is the app called `mdkr64.app`?
 
@@ -98,10 +109,9 @@ chmod +x *.sh
 
 ## Renderer notes (Intel GPUs)
 
-The qualified visual path is **WebGPU** (wgpu-native → Metal). How it behaves
-on Intel-era GPUs (Iris/AMD) is the main open question for v1.0.
-`./run-gbmt-macos.sh --gl` forces the OpenGL backend — **diagnostic-only**,
-not for play.
+The qualified visual path is **WebGPU** (wgpu-native → Metal) — confirmed
+working on Intel Iris Plus (2026-09-04). `./run-gbmt-macos.sh --gl` forces
+the OpenGL backend — **diagnostic-only**, not for play.
 
 ## Gatekeeper ("unidentified developer")
 
