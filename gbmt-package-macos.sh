@@ -2,7 +2,7 @@
 # gbmt-package-macos.sh
 # goldenballoon-mactimber — Intel Mac DMG packaging
 #
-# Packages the verified mdkr64.app into a distributable DMG using upstream's
+# Packages the verified "Golden Balloon.app" into a distributable DMG using upstream's
 # app-agnostic macos/Scripts/create_dmg.sh (hdiutil-based, styled layout,
 # hdiutil verify included), then renames to the series scheme and writes a
 # SHA-256 sidecar. Skips upstream's verify_unsigned_dmg.sh because it chains
@@ -22,19 +22,22 @@
 #   logs/package-<timestamp>.log
 #
 # CHANGELOG
+# v1.1  (2026-09-04) - Pin bump to upstream v1.6.0; app bundle is now
+#                      "Golden Balloon.app" (upstream rename, engine binary still
+#                      mdkr64); pending hardware re-validation
 # v1.0  (2026-09-04) - Promoted unchanged after confirmed end-to-end validation
 #                      on Intel hardware (see CHANGELOG.md)
 # v0.10 (2026-09-03) - Initial version
 
 set -eo pipefail
-VERSION="1.0"
+VERSION="1.1"
 SCRIPT_DIR="${0:A:h}"
 
-UPSTREAM_TAG="v1.5.2"
+UPSTREAM_TAG="v1.6.0"
 APP_VERSION="${UPSTREAM_TAG#v}"
 
 REPO_DIR="$SCRIPT_DIR/goldenballoon"
-APP_PATH="$REPO_DIR/dist/mdkr64.app"
+APP_PATH="$REPO_DIR/dist/Golden Balloon.app"
 DIST_DIR="$SCRIPT_DIR/dist"
 DMG_NAME="Golden-Balloon-MacTimber-$APP_VERSION-Intel-Mac.dmg"
 DMG_PATH="$DIST_DIR/$DMG_NAME"

@@ -2,7 +2,7 @@
 # run-gbmt-macos.sh
 # goldenballoon-mactimber — local dev launcher
 #
-# Launches the built mdkr64.app engine directly (stdout captured to logs/).
+# Launches the built "Golden Balloon.app" engine directly (stdout captured to logs/).
 # If a ROM is present in roms/, it is passed via --rom; otherwise the
 # launcher's own file picker asks for one. The ROM is validated by the game
 # at runtime (US 1.1 / EU 1.1 only) and is never copied anywhere.
@@ -17,16 +17,19 @@
 #   logs/run-<timestamp>.log   (last 5 kept)
 #
 # CHANGELOG
+# v1.1  (2026-09-04) - Pin bump to upstream v1.6.0; app bundle is now
+#                      "Golden Balloon.app" (upstream rename, engine binary still
+#                      mdkr64); pending hardware re-validation
 # v1.0  (2026-09-04) - Promoted unchanged after confirmed end-to-end validation
 #                      on Intel hardware (see CHANGELOG.md)
 # v0.10 (2026-09-03) - Initial version
 
 set -eo pipefail
-VERSION="1.0"
+VERSION="1.1"
 SCRIPT_DIR="${0:A:h}"
 
 REPO_DIR="$SCRIPT_DIR/goldenballoon"
-APP_PATH="$REPO_DIR/dist/mdkr64.app"
+APP_PATH="$REPO_DIR/dist/Golden Balloon.app"
 ROM_DIR="$SCRIPT_DIR/roms"
 TIMESTAMP="$(date '+%Y%m%d-%H%M%S')"
 LOG_DIR="$SCRIPT_DIR/logs"

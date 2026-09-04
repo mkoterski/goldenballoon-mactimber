@@ -5,7 +5,7 @@
 # Clones akratch/goldenballoon pinned to $UPSTREAM_TAG, builds the pinned
 # standalone SDL2 dylib for x86_64, then drives upstream's own
 # macos/Scripts/build_app_bundle.sh with --arch x86_64 to compile the engine
-# and assemble an ad-hoc-signed mdkr64.app. Unlike the sibling ports
+# and assemble an ad-hoc-signed "Golden Balloon.app". Unlike the sibling ports
 # (perfectdark-macvanta etc.), upstream ships a complete macOS packaging
 # pipeline, so this wrapper pins, orchestrates, and validates instead of
 # reimplementing.
@@ -26,6 +26,9 @@
 #   logs/build-<timestamp>.log   ← top-level logs/, survives rm -rf goldenballoon/
 #
 # CHANGELOG
+# v1.1  (2026-09-04) - Pin bump to upstream v1.6.0; app bundle is now
+#                      "Golden Balloon.app" (upstream rename, engine binary still
+#                      mdkr64); pending hardware re-validation
 # v1.0  (2026-09-04) - Promoted unchanged after confirmed end-to-end validation
 #                      on Intel hardware (see CHANGELOG.md)
 # v0.10 (2026-09-03) - Initial version; series conventions from
@@ -34,18 +37,18 @@
 #                      (see RESEARCH.md §5a)
 
 set -eo pipefail
-VERSION="1.0"
+VERSION="1.1"
 SCRIPT_DIR="${0:A:h}"
 
 UPSTREAM_REPO="https://github.com/akratch/goldenballoon.git"
-UPSTREAM_TAG="v1.5.2"            # bump deliberately; keep in sync with README/CHANGELOG
+UPSTREAM_TAG="v1.6.0"            # bump deliberately; keep in sync with README/CHANGELOG
 APP_VERSION="${UPSTREAM_TAG#v}"  # must match the version compiled into mdkr64
 ARCH="x86_64"
 DEPLOYMENT_TARGET="14.0"         # sign-off decision: Sonoma floor (RESEARCH.md §5a)
 
 REPO_DIR="$SCRIPT_DIR/goldenballoon"
 BUILD_DIR_NAME="build-macos-release"
-APP_PATH="$REPO_DIR/dist/mdkr64.app"
+APP_PATH="$REPO_DIR/dist/Golden Balloon.app"
 TIMESTAMP="$(date '+%Y%m%d-%H%M')"
 
 LOG_DIR="$SCRIPT_DIR/logs"
@@ -175,7 +178,7 @@ echo "   (network required: wgpu-native prebuilt is fetched + hash-verified)" | 
   ./macos/Scripts/build_app_bundle.sh \
     --release \
     --build-dir "$BUILD_DIR_NAME" \
-    --output dist/mdkr64.app \
+    --output "dist/Golden Balloon.app" \
     --arch "$ARCH" \
     --version "$APP_VERSION" \
     --build-stamp "$SOURCE_COMMIT" \

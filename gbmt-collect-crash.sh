@@ -12,12 +12,15 @@
 #   logs/gbmt-crash-bundle-<timestamp>.zip
 #
 # CHANGELOG
+# v1.1  (2026-09-04) - Pin bump to upstream v1.6.0; app bundle is now
+#                      "Golden Balloon.app" (upstream rename, engine binary still
+#                      mdkr64); pending hardware re-validation
 # v1.0  (2026-09-04) - Promoted unchanged after confirmed end-to-end validation
 #                      on Intel hardware (see CHANGELOG.md)
 # v0.10 (2026-09-03) - Initial version
 
 set -eo pipefail
-VERSION="1.0"
+VERSION="1.1"
 SCRIPT_DIR="${0:A:h}"
 TIMESTAMP="$(date '+%Y%m%d-%H%M')"
 LOG_DIR="$SCRIPT_DIR/logs"

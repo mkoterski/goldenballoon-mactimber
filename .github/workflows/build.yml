@@ -29,7 +29,7 @@ jobs:
           pkg-config --version
           python3 --version
 
-      # Clones upstream pinned to v1.5.2, builds SDL2 (x86_64) from source,
+      # Clones upstream pinned to v1.6.0, builds SDL2 (x86_64) from source,
       # fetches the hash-pinned wgpu-native x86_64 prebuilt (network), builds
       # the engine, and assembles the ad-hoc-signed app.
       - name: Build (gbmt-build-macos.sh)
@@ -43,7 +43,7 @@ jobs:
 
       - name: Smoke test (--version, headless-safe)
         run: |
-          APP=goldenballoon/dist/mdkr64.app
+          APP="goldenballoon/dist/Golden Balloon.app"
           EXEC="$APP/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Contents/Info.plist")"
           lipo -archs "$EXEC"
           test "$(lipo -archs "$EXEC")" = "x86_64"

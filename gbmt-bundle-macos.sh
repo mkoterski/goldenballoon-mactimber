@@ -21,15 +21,18 @@
 #   logs/bundle-<timestamp>.log
 #
 # CHANGELOG
+# v1.1  (2026-09-04) - Pin bump to upstream v1.6.0; app bundle is now
+#                      "Golden Balloon.app" (upstream rename, engine binary still
+#                      mdkr64); pending hardware re-validation
 # v1.0  (2026-09-04) - Promoted unchanged after confirmed end-to-end validation
 #                      on Intel hardware (see CHANGELOG.md)
 # v0.10 (2026-09-03) - Initial version
 
 set -eo pipefail
-VERSION="1.0"
+VERSION="1.1"
 SCRIPT_DIR="${0:A:h}"
 
-UPSTREAM_TAG="v1.5.2"
+UPSTREAM_TAG="v1.6.0"
 APP_VERSION="${UPSTREAM_TAG#v}"
 ARCH="x86_64"
 DEPLOYMENT_TARGET="14.0"
@@ -37,7 +40,7 @@ BUNDLE_ID="com.mkoterski.goldenballoon-mactimber"
 COPYRIGHT="© 2026 Golden Balloon contributors (akratch) — Intel Mac packaging: mkoterski"
 
 REPO_DIR="$SCRIPT_DIR/goldenballoon"
-APP_PATH="$REPO_DIR/dist/mdkr64.app"
+APP_PATH="$REPO_DIR/dist/Golden Balloon.app"
 INFO_PLIST="$APP_PATH/Contents/Info.plist"
 TIMESTAMP="$(date '+%Y%m%d-%H%M')"
 

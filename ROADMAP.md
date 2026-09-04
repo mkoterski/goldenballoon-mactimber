@@ -57,10 +57,11 @@ faster iteration even if upstream ships its own Intel builds.
 
 ## Phase 5 — Maintenance
 
-- **Pin bumps:** upstream moves fast (v1.6.0 with online multiplayer is in
-  beta). When it goes stable: bump `UPSTREAM_TAG` in all gbmt-* scripts,
-  rebuild, re-run the Phase 3 checklist (abbreviated), release as
-  `v1.1 (tracks goldenballoon v1.6.0)`.
+- **Pin bumps:** v1.6.0 went stable and the pin is bumped (2026-09-04) —
+  upstream also renamed the bundle to `Golden Balloon.app` (engine binary
+  still `mdkr64`), and the scripts track that. Next: rebuild + abbreviated
+  Phase 3 checklist on the Intel Mac, then release
+  `v1.1 (tracks goldenballoon v1.6.0)`. Same procedure for future bumps.
 - **CI runner sunset:** `macos-15-intel` retires ~Fall 2027. Fallback:
   cross-compile on an arm64 runner (`CMAKE_OSX_ARCHITECTURES=x86_64`,
   Rosetta smoke test — itself gone with macOS 28 images), or a self-hosted

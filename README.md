@@ -21,10 +21,12 @@ Codename: *Timber* — the tiger who runs the races while Diddy's away.
 
 ## Status
 
-**v1.0 — confirmed working on real Intel hardware (2026-09-04, tracks
-goldenballoon v1.5.2).** Full pipeline validated: setup → build → bundle →
-package → DMG install to `/Applications` → Gatekeeper flow → gameplay on
-WebGPU. Next: upstream contribution — see [ROADMAP.md](ROADMAP.md).
+**v1.1 in progress — pin bumped to goldenballoon v1.6.0 (online
+multiplayer), awaiting hardware re-validation.** Upstream also renamed the
+bundle in v1.6.0: the app is now **`Golden Balloon.app`** (the engine binary
+inside stays `mdkr64`). **v1.0** (tracks v1.5.2) remains the last release
+confirmed end-to-end on real Intel hardware — see Confirmed Working below
+and [ROADMAP.md](ROADMAP.md).
 
 ## Confirmed Working (2026-09-04)
 
@@ -51,7 +53,7 @@ Upstream ships a complete first-party macOS packaging pipeline
 (`macos/Scripts/`: pinned SDL2 build, app bundling with ad-hoc signing, DMG
 creation, asset-free verification). These scripts **wrap that pipeline with
 `--arch x86_64`** instead of reimplementing it. The wrapper owns: the version
-pin (upstream `v1.5.2`, bumped deliberately), series logging/UX, bundle
+pin (upstream `v1.6.0`, bumped deliberately), series logging/UX, bundle
 rebranding, x86_64-only enforcement (any arm64/universal output fails the
 build), and run/diagnostics tooling.
 
@@ -77,7 +79,7 @@ build), and run/diagnostics tooling.
 git clone https://github.com/mkoterski/goldenballoon-mactimber.git
 cd goldenballoon-mactimber
 chmod +x *.sh
-./gbmt-initial-setup.sh    # 1. toolchain check + clone upstream @ v1.5.2
+./gbmt-initial-setup.sh    # 1. toolchain check + clone upstream @ v1.6.0
 ./gbmt-build-macos.sh      # 2. SDL2 (x86_64) + engine + ad-hoc-signed .app
 ./gbmt-bundle-macos.sh     # 3. rebrand + re-seal + verify (x86_64, ROM-free)
 ./gbmt-package-macos.sh    # 4. distributable DMG + SHA-256 sidecar
@@ -89,7 +91,7 @@ chmod +x *.sh
 | Script | Purpose |
 | --- | --- |
 | `gbmt-initial-setup.sh` | One-time host check (CLT, Homebrew, tools) + pinned upstream clone |
-| `gbmt-build-macos.sh` | Build pinned SDL2 + engine, assemble `mdkr64.app` via upstream, x86_64-only enforced. Flags: `--clean`, `--verbose` |
+| `gbmt-build-macos.sh` | Build pinned SDL2 + engine, assemble `Golden Balloon.app` via upstream, x86_64-only enforced. Flags: `--clean`, `--verbose` |
 | `gbmt-bundle-macos.sh` | Rebrand bundle ID, ad-hoc re-seal, run upstream's Gatekeeper + asset-free verifiers with `--expected-arch x86_64` |
 | `gbmt-package-macos.sh` | DMG via upstream `create_dmg.sh` → `dist/Golden-Balloon-MacTimber-<ver>-Intel-Mac.dmg` + `.sha256` |
 | `run-gbmt-macos.sh` | Dev launcher; auto-passes a ROM from `roms/`; `--gl` forces the diagnostic OpenGL renderer |

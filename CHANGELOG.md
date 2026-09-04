@@ -4,6 +4,15 @@ All notable changes to the goldenballoon-mactimber scripts. Format follows
 [Keep a Changelog](https://keepachangelog.com/); versions are wrapper
 versions, each noting the upstream tag it tracks.
 
+## [Unreleased] — will become 1.1 (tracks goldenballoon v1.6.0)
+
+- Pin bumped v1.5.2 → v1.6.0 (online multiplayer went stable upstream).
+- Upstream renamed the bundle in v1.6.0: the app is now `Golden Balloon.app`
+  (engine binary/`CFBundleExecutable` still `mdkr64`); all scripts and CI
+  updated for the new path.
+- Awaiting hardware re-validation (abbreviated Phase 3 checklist) before the
+  v1.1 release.
+
 ## [1.0] — 2026-09-04 (tracks goldenballoon v1.5.2)
 
 Confirmed end-to-end working on real Intel hardware: **MacBook Pro 13" 2020
