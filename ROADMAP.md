@@ -23,24 +23,24 @@ Bundle: rebrand + re-seal clean; Gatekeeper + asset-free verifiers PASS
 `.sha256`; DMG checksum and packaged-app re-verify PASS. Remaining
 user-install test moved to Phase 3.
 
-## Phase 3 — Hardware validation (the v1.0 gate) — mostly done 2026-09-04
+## Phase 3 — Hardware validation (the v1.0 gate) ✅ done 2026-09-04 → v1.0
 
 The single biggest unknown — **WebGPU (wgpu-native → Metal) on Intel Iris
-Plus — is answered: it works.** Run session (US 1.1 ROM, dev launcher):
-renderer `webgpu`, 1280×960 @ 2×, 60 Hz fifo, no visual corruption reported,
-clean exit; 4 audio underruns in ~2.5 min (watch, not blocking).
+Plus — is answered: it works.**
 
-- [x] Renderer `webgpu` on Iris Plus (no `--gl` override)
-- [x] ROM (US 1.1) validates and loads; gameplay reached, confirmed working
+- [x] Build from fresh checkout passes (first-clone build, 2026-09-04)
+- [x] Renderer `webgpu` on Iris Plus (no `--gl` override); 1280×960 @ 2×,
+      60 Hz fifo, no visual corruption, clean exit
+- [x] ROM (US 1.1) validates and loads; gameplay confirmed working
 - [x] No `std::bad_variant_access`-class crash (the Starship-port caution)
-- [ ] Mount DMG, drag to `/Applications`, launch via the documented
-      Gatekeeper flow — a "damaged" error fails this
-- [ ] Clean `--clean` build from a fresh checkout passes
+- [x] DMG mounted, app installed to `/Applications`, launched via the
+      documented Gatekeeper flow — no "damaged" error
 
-Then: cut **v1.0**, recording exact hardware + macOS in CHANGELOG.md, and
-attach the DMG + `.sha256` to a GitHub release.
+Watch item (non-blocking): 4 audio underruns in a ~2.5 min session.
+**v1.0 cut** — hardware + macOS recorded in CHANGELOG.md; attach the DMG +
+`.sha256` to a GitHub release.
 
-## Phase 4 — Upstream contribution (after v1.0)
+## Phase 4 — Upstream contribution (next step)
 
 Upstream has already planned this work but not executed it
 (`docs/sprints/S4-platform-breadth.md`: "US-1 — Play on an Intel Mac",

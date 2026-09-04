@@ -21,10 +21,10 @@ Codename: *Timber* — the tiger who runs the races while Diddy's away.
 
 ## Status
 
-**v0.10 — confirmed working on real Intel hardware (2026-09-04).** The full
-pipeline (setup → build → bundle → package → run) passed on the target Mac,
-and the game runs on WebGPU. Remaining before v1.0: the DMG
-install-to-`/Applications` Gatekeeper pass — see [ROADMAP.md](ROADMAP.md).
+**v1.0 — confirmed working on real Intel hardware (2026-09-04, tracks
+goldenballoon v1.5.2).** Full pipeline validated: setup → build → bundle →
+package → DMG install to `/Applications` → Gatekeeper flow → gameplay on
+WebGPU. Next: upstream contribution — see [ROADMAP.md](ROADMAP.md).
 
 ## Confirmed Working (2026-09-04)
 
@@ -36,6 +36,8 @@ MacBook Pro 13" 2020 (i7-1068NG7, Intel Iris Plus, 32 GB), macOS Tahoe 26.5.2:
   Gatekeeper + asset-free verifiers all PASS (6/6 checks).
 - **Package:** `Golden-Balloon-MacTimber-1.5.2-Intel-Mac.dmg` (10 MB) +
   `.sha256`; DMG checksum and packaged-app re-verification PASS.
+- **Install:** DMG → `/Applications`, launched via the documented Gatekeeper
+  "Open Anyway" flow — no "damaged" error.
 - **Gameplay:** US 1.1 ROM SHA-256-validated and loaded; **WebGPU
   (wgpu-native → Metal) works on Intel Iris Plus** — the main v1.0 unknown,
   answered. 1280×960 @ 2× render scale, 60 Hz fifo, clean exit (status 0).
@@ -129,11 +131,9 @@ A **"damaged"** error is not normal — the seal is broken; re-run
 
 ## Versioning
 
-v1.0 requires confirmed end-to-end success on a clean Intel Mac on Tahoe:
-clean `--clean` build, DMG install to `/Applications`, documented Gatekeeper
-behavior, ROM load, and a **full race completed without crashing** with
-controller, audio, and HUD on par with upstream's arm64 build. After v1.0,
-versions track the upstream pin. See [CHANGELOG.md](CHANGELOG.md) and
+**v1.0 reached 2026-09-04** — confirmed end-to-end on the validated Intel Mac
+(see Confirmed Working and [CHANGELOG.md](CHANGELOG.md)). From here versions
+track the upstream pin, e.g. `v1.1 (tracks goldenballoon v1.6.0)` — see
 [ROADMAP.md](ROADMAP.md).
 
 ## CI
