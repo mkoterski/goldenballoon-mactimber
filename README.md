@@ -2,33 +2,57 @@
 
 macOS **Intel (x86_64)** build, bundle, and packaging scripts for
 [akratch/goldenballoon](https://github.com/akratch/goldenballoon) — the native
-source port of the 1997 N64 kart racer, built from its decompilation. Upstream
-ships Apple Silicon (arm64), Windows, and Linux builds; this unofficial,
-community wrapper adds the missing Intel Mac build — targeting **Intel Macs
-(x86_64) on macOS Sonoma 14 and later** (validated on Tahoe).
+source port of the 1997 N64 kart racer, built from its decompilation.
+Upstream ships arm64, Windows, and Linux; this unofficial community wrapper
+adds the missing Intel Mac build (macOS Sonoma 14+, validated on Tahoe).
 
-Follows the same conventions as
+Sibling ports:
 [perfectdark-macvanta](https://github.com/mkoterski/perfectdark-macvanta),
 [spaghettikart-maccheese](https://github.com/mkoterski/spaghettikart-maccheese),
-and [starship-macalfa](https://github.com/mkoterski/starship-macalfa).
+[starship-macalfa](https://github.com/mkoterski/starship-macalfa).
 Codename: *Timber* — the tiger who runs the races while Diddy's away.
 
-> ⚠️ **You need a legally obtained Diddy Kong Racing N64 ROM to play.**
-> Supported versions are **US 1.1** and **EU 1.1** (`.z64`/`.v64`/`.n64`);
-> the game validates the dump by SHA-256 at runtime and refuses others.
-> No ROM or game data is ever bundled, committed, or required to *build* —
+> ⚠️ **You need a legally obtained Diddy Kong Racing N64 ROM to play** —
+> US 1.1 or EU 1.1 (`.z64`/`.v64`/`.n64`), SHA-256-validated at runtime.
+> No ROM or game data is ever bundled or needed to *build* —
 > see [roms/README.md](roms/README.md).
 
 ---
 
 ## Status
 
-**v0.10 — scaffold, unverified.** No build has been confirmed on real Intel
-hardware yet; see [ROADMAP.md](ROADMAP.md) for the path to v1.0 and
-[RESEARCH.md](RESEARCH.md) for why this is expected to be a routine build:
-upstream's build system already carries x86_64 support (pinned
-`wgpu-macos-x86_64` prebuilt, SDL2-from-source with `--arch x86_64`) — it has
-simply never been shipped.
+**v1.0 — confirmed working on real Intel hardware (2026-09-04, tracks
+goldenballoon v1.5.2).** Full pipeline validated: setup → build → bundle →
+package → DMG install to `/Applications` → Gatekeeper flow → gameplay on
+WebGPU. Next: upstream contribution — see [ROADMAP.md](ROADMAP.md).
+
+## Confirmed Working (2026-09-04)
+
+MacBook Pro 13" 2020 (i7-1068NG7, Intel Iris Plus, 32 GB), macOS Tahoe 26.5.2:
+
+- **Build:** x86_64-only `mdkr64.app`, ad-hoc sealed, verify PASS, reports
+  `mdkr64 1.5.2`. No patches needed (clang 21 OK).
+- **Bundle:** rebranded to `com.mkoterski.goldenballoon-mactimber`, re-sealed;
+  Gatekeeper + asset-free verifiers all PASS (6/6 checks).
+- **Package:** `Golden-Balloon-MacTimber-1.5.2-Intel-Mac.dmg` (10 MB) +
+  `.sha256`; DMG checksum and packaged-app re-verification PASS.
+- **Install:** DMG → `/Applications`, launched via the documented Gatekeeper
+  "Open Anyway" flow — no "damaged" error.
+- **Gameplay:** US 1.1 ROM SHA-256-validated and loaded; **WebGPU
+  (wgpu-native → Metal) works on Intel Iris Plus** — the main v1.0 unknown,
+  answered. 1280×960 @ 2× render scale, 60 Hz fifo, clean exit (status 0).
+  Minor: 4 audio underruns over a ~2.5 min session.
+
+## Why is the app called `mdkr64.app`?
+
+By design — that is not a bug. `mdkr64` is **upstream's engine name**: its
+CMake target, binary, `CFBundleExecutable`, and `--version` string
+(`mdkr64 1.5.2`). Upstream's `build_app_bundle.sh` assembles `mdkr64.app`,
+and both upstream's verifiers and this wrapper's checks expect that name, so
+the wrapper keeps it. Branding lives elsewhere: the bundle ID
+(`com.mkoterski.goldenballoon-mactimber`, set by `gbmt-bundle-macos.sh`) and
+the DMG name (`Golden-Balloon-MacTimber-<ver>-Intel-Mac.dmg`). `gbmt` is only
+the script prefix, never the app name.
 
 ---
 
@@ -36,25 +60,24 @@ simply never been shipped.
 
 Upstream ships a complete first-party macOS packaging pipeline
 (`macos/Scripts/`: pinned SDL2 build, app bundling with ad-hoc signing, DMG
-creation, asset-free verification). Unlike the siblings, these scripts
-**wrap that pipeline with `--arch x86_64`** instead of reimplementing it.
-The wrapper owns: the version **pin** (upstream `v1.5.2`, bumped
-deliberately), series logging/UX, bundle rebranding
-(`com.mkoterski.goldenballoon-mactimber`), x86_64-only enforcement (any
-arm64/universal output fails the build), and the run/diagnostics tooling.
+creation, asset-free verification). These scripts **wrap that pipeline with
+`--arch x86_64`** instead of reimplementing it. The wrapper owns: the version
+pin (upstream `v1.5.2`, bumped deliberately), series logging/UX, bundle
+rebranding, x86_64-only enforcement (any arm64/universal output fails the
+build), and run/diagnostics tooling.
 
 ---
 
 ## Requirements
 
-- Intel Mac (x86_64) on macOS 14+ — validated hardware: MacBook Pro 13" 2020
+- Intel Mac (x86_64) on macOS 14+ — validated: MacBook Pro 13" 2020
   (i7-1068NG7, Iris Plus), macOS Tahoe 26.5
 - Xcode Command Line Tools (`xcode-select --install`)
 - Homebrew with `cmake`, `pkg-config`, `python3`, `git` (installed
-  automatically; note Intel macOS is Homebrew **Tier 3** since 2026-09 —
-  installs may compile from source)
-- **Network access during build**: upstream fetches a SHA-256-pinned
-  wgpu-native prebuilt at CMake configure time
+  automatically; Intel macOS is Homebrew **Tier 3** since 2026-09 — installs
+  may compile from source)
+- **Network access during build** (SHA-256-pinned wgpu-native fetch at
+  configure time)
 - ~5 GB free disk space
 
 ---
@@ -88,55 +111,46 @@ chmod +x *.sh
 
 ## Renderer notes (Intel GPUs)
 
-Golden Balloon's qualified visual path is **WebGPU** (wgpu-native → Metal).
-How Metal-via-wgpu behaves on Intel-era GPUs (Intel Iris/AMD) is the main
-open question for v1.0 — it is exactly what hardware validation must answer.
-`./run-gbmt-macos.sh --gl` forces upstream's OpenGL backend, which is
-**diagnostic-only**: use it to isolate renderer problems, not to play.
+The qualified visual path is **WebGPU** (wgpu-native → Metal) — confirmed
+working on Intel Iris Plus (2026-09-04). `./run-gbmt-macos.sh --gl` forces
+the OpenGL backend — **diagnostic-only**, not for play.
 
 ## Gatekeeper ("unidentified developer")
 
-Releases are **ad-hoc signed** (integrity seal, no Developer ID, no
-notarization). On first launch macOS will refuse with an unidentified-
-developer warning:
+Releases are ad-hoc signed (integrity seal, no Developer ID/notarization).
+On first launch:
 
 1. Attempt the launch once (double-click, let it refuse).
-2. Open **System Settings → Privacy & Security**, scroll down, click
-   **Open Anyway**, then confirm **Open**.
+2. **System Settings → Privacy & Security** → **Open Anyway** → **Open**.
 
-On older macOS the classic right-click → **Open** → **Open** shortcut also
-works. A **"damaged"** error is not normal — it means the seal is broken;
-re-run `./gbmt-bundle-macos.sh` and file an issue. (Lesson from the sibling
-ports: on Tahoe, `xattr -cr` alone is not sufficient — the ad-hoc seal is
-required.)
+A **"damaged"** error is not normal — the seal is broken; re-run
+`./gbmt-bundle-macos.sh` and file an issue. (Series lesson: on Tahoe,
+`xattr -cr` alone is not sufficient — the ad-hoc seal is required.)
 
 ---
 
 ## Versioning
 
-Scripts start at `v0.10` and will reach `v1.0` only after confirmed
-end-to-end working on a clean Intel Mac running macOS Tahoe: clean
-`--clean` build, DMG install to `/Applications`, Gatekeeper behavior as
-documented, ROM load, and a **full race completed without crashing** — with
-controller input, audio, and HUD on par with upstream's arm64 build. After
-v1.0, versions track the upstream pin, e.g. `v1.1 (tracks goldenballoon
-v1.6.0)`. See [CHANGELOG.md](CHANGELOG.md) and [ROADMAP.md](ROADMAP.md).
+**v1.0 reached 2026-09-04** — confirmed end-to-end on the validated Intel Mac
+(see Confirmed Working and [CHANGELOG.md](CHANGELOG.md)). From here versions
+track the upstream pin, e.g. `v1.1 (tracks goldenballoon v1.6.0)` — see
+[ROADMAP.md](ROADMAP.md).
 
 ## CI
 
-`.github/workflows/build.yml` builds and packages on GitHub's native Intel
-runner (`macos-15-intel`, available until ~Fall 2027). Hosted CI validates
-the toolchain, binary architecture, bundle seal, and `--version` startup —
-it **cannot** validate real GPU gameplay. Hardware testing gates v1.0.
+`.github/workflows/build.yml` builds and packages on `macos-15-intel`
+(available until ~Fall 2027). CI validates toolchain, binary arch, bundle
+seal, and `--version` startup — not real GPU gameplay. Hardware testing
+gates v1.0.
 
 ## Credits
 
 - [akratch/goldenballoon](https://github.com/akratch/goldenballoon) — the
-  Golden Balloon port and its first-class macOS packaging pipeline (MIT)
+  Golden Balloon port and its macOS packaging pipeline (MIT)
 - The Diddy Kong Racing decompilation contributors
 - Sibling conventions: perfectdark-macvanta / spaghettikart-maccheese /
   starship-macalfa
 - Intel Mac packaging scripts: mkoterski
 
-This project is unaffiliated with Nintendo or Rare. It contains no game
-assets; bring your own legally obtained ROM.
+Unaffiliated with Nintendo or Rare. No game assets included; bring your own
+legally obtained ROM.

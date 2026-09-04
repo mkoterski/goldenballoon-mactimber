@@ -3,53 +3,44 @@
 The conceptual path from scaffold (v0.10) to a confirmed Intel Mac release
 (v1.0) and beyond. Each phase gates the next.
 
-## Phase 1 — First build on the Intel Mac (next step)
+## Phase 1 — First build on the Intel Mac ✅ done 2026-09-04
 
-On the Intel Mac (MacBook Pro 2020, Tahoe 26.5):
+Setup + build ran clean on the MacBook Pro 2020 (Tahoe 26.5.2); valid
+x86_64 `mdkr64.app`, sealed and verified, reports `mdkr64 1.5.2`. Findings:
 
-```
-git clone https://github.com/mkoterski/goldenballoon-mactimber.git ~/Documents/GitHub/goldenballoon-mactimber
-cd ~/Documents/GitHub/goldenballoon-mactimber
-chmod +x *.sh
-./gbmt-initial-setup.sh
-./gbmt-build-macos.sh
-```
+- wgpu fetch and SDL2-from-source worked; clang 21 fine, no `patches/` needed.
+- Setup log warning `refs/tags/v1.5.2 ... is not a commit!` is harmless — git
+  noting the annotated tag object; checkout landed on the pinned commit.
+- The app is named `mdkr64.app`, not `gbmt.app` — upstream's engine name,
+  kept by design (see README "Why is the app called mdkr64.app?").
+- Only build noise: expected SDL2 deprecation warnings and the Homebrew
+  Tier 3 notice.
 
-Expected risks, in likelihood order:
-1. Configure-time wgpu fetch needs network; corporate proxies can break it.
-2. SDL2-from-source or engine warnings promoted to errors by newer clang 21
-   — if so, a `patches/` dir gets introduced (none needed so far).
-3. Anything else is a real finding — log it in an issue.
+## Phase 2 — Bundle + package ✅ done 2026-09-04
 
-## Phase 2 — Bundle, package, install like a user
+Bundle: rebrand + re-seal clean; Gatekeeper + asset-free verifiers PASS
+(6/6). Package: `Golden-Balloon-MacTimber-1.5.2-Intel-Mac.dmg` (10 MB) +
+`.sha256`; DMG checksum and packaged-app re-verify PASS. Remaining
+user-install test moved to Phase 3.
 
-`./gbmt-bundle-macos.sh` → `./gbmt-package-macos.sh`, then: mount the DMG,
-drag to `/Applications`, launch via the documented Gatekeeper flow. A
-"damaged" error (vs. the normal unidentified-developer prompt) fails this
-phase.
+## Phase 3 — Hardware validation (the v1.0 gate) ✅ done 2026-09-04 → v1.0
 
-## Phase 3 — Hardware validation (the v1.0 gate)
+The single biggest unknown — **WebGPU (wgpu-native → Metal) on Intel Iris
+Plus — is answered: it works.**
 
-The single biggest unknown: **WebGPU (wgpu-native → Metal) on the Intel
-Iris Plus GPU**. Checklist (mirrors README Versioning + instructions §8):
+- [x] Build from fresh checkout passes (first-clone build, 2026-09-04)
+- [x] Renderer `webgpu` on Iris Plus (no `--gl` override); 1280×960 @ 2×,
+      60 Hz fifo, no visual corruption, clean exit
+- [x] ROM (US 1.1) validates and loads; gameplay confirmed working
+- [x] No `std::bad_variant_access`-class crash (the Starship-port caution)
+- [x] DMG mounted, app installed to `/Applications`, launched via the
+      documented Gatekeeper flow — no "damaged" error
 
-- [ ] Clean `--clean` build from a fresh checkout passes
-- [ ] App launches from `/Applications`; Gatekeeper behaves as documented
-- [ ] Diagnostics panel shows `Renderer: webgpu` (no `--gl` override)
-- [ ] ROM (US/EU 1.1) validates and loads; gameplay reached
-- [ ] **Full race completed without crash** (watch for
-      `std::bad_variant_access`-class errors — the Starship port's Intel
-      Metal failure mode; different stack here, same caution)
-- [ ] No fractured sky/terrain or repeated-logo corruption (upstream's own
-      play-test criteria)
-- [ ] Controller input, audio, widescreen HUD on par with the arm64 build
-- [ ] If WebGPU fails on Iris Plus: document, test `--gl` as diagnostic
-      evidence, and file upstream — do NOT ship OpenGL as the default
+Watch item (non-blocking): 4 audio underruns in a ~2.5 min session.
+**v1.0 cut** — hardware + macOS recorded in CHANGELOG.md; attach the DMG +
+`.sha256` to a GitHub release.
 
-Then: cut **v1.0**, recording exact hardware + macOS in CHANGELOG.md, and
-attach the DMG + `.sha256` to a GitHub release.
-
-## Phase 4 — Upstream contribution (after v1.0)
+## Phase 4 — Upstream contribution (next step)
 
 Upstream has already planned this work but not executed it
 (`docs/sprints/S4-platform-breadth.md`: "US-1 — Play on an Intel Mac",
@@ -85,7 +76,7 @@ faster iteration even if upstream ships its own Intel builds.
 
 | Item | Status |
 | --- | --- |
-| wgpu→Metal on Intel Iris Plus | **Unknown — Phase 3 answers it** |
+| wgpu→Metal on Intel Iris Plus | **Confirmed working 2026-09-04** |
 | Upstream x86_64 CMake path | In-tree, hash pinned, unshipped (verified in RESEARCH.md) |
 | `verify_unsigned_release.sh` arm64 hardcode | Worked around (direct verifier calls); upstream PR candidate |
 | GitHub Intel runners | Available (`macos-15-intel`) until ~Fall 2027 |

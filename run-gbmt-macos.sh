@@ -17,10 +17,12 @@
 #   logs/run-<timestamp>.log   (last 5 kept)
 #
 # CHANGELOG
+# v1.0  (2026-09-04) - Promoted unchanged after confirmed end-to-end validation
+#                      on Intel hardware (see CHANGELOG.md)
 # v0.10 (2026-09-03) - Initial version
 
 set -eo pipefail
-VERSION="0.10"
+VERSION="1.0"
 SCRIPT_DIR="${0:A:h}"
 
 REPO_DIR="$SCRIPT_DIR/goldenballoon"
