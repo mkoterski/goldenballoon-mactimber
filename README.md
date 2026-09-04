@@ -28,6 +28,8 @@ WebGPU. Next: upstream contribution — see [ROADMAP.md](ROADMAP.md).
 
 ## Confirmed Working (2026-09-04)
 
+![Golden Balloon running on WebGPU on the Intel MacBook Pro](docs/screenshot-gameplay-webgpu.png)
+
 MacBook Pro 13" 2020 (i7-1068NG7, Intel Iris Plus, 32 GB), macOS Tahoe 26.5.2:
 
 - **Build:** x86_64-only `mdkr64.app`, ad-hoc sealed, verify PASS, reports
